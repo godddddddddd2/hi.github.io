@@ -1,0 +1,18 @@
+.search-input {
+    margin-top: 10px;
+    border-radius: 25px;
+    border: none;
+    width: 500px;
+    height: 60px;
+    background-color: #1f1f1f;
+    box-shadow: 0 0 6px rgba(0, 0, 0, 0.5);
+    color: white;
+    text-align: center;
+    font-size: 18px;
+    outline: none;
+    font-family: Arial, sans-serif;
+}
+
+/*.search-input::placeholder {
+    opacity: 1;
+}*/

@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Games | nate-games</title>
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7098145720803384"
+    crossorigin="anonymous"></script>
+  <meta name="description" content="🎮 Get ready!" />
+  <link rel="icon" type="image/png" href="/0/assets/img/favicon.png" />
+  <link rel="stylesheet" href="/0/assets/css/games.css" />
+  <link rel="stylesheet" href="search.css">
+  <link rel="stylesheet" href="/0/assets/css/tos.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body onload="checkTOS()">
+  <div id="tos-overlay">
+    <div id="tos-box">
+      <h2 id="tos-title">Terms of Service</h2>
+      <br>
+      <div id="tos-content">
+      </div>
+      <p><a style="text-decoration: none;" href="javascript:void(0);"
+          onclick="window.location.href='/0/privacy-policy.html'">Privacy Policy</a> &bull; <a
+          href="javascript:void(0);"
+          onclick="window.open('https://github.com/nate-games/nate-games.github.io/releases/latest', '_blank'); return false;"
+          style="text-decoration: none;" target="_blank">Latest</a></p>
+      <button onclick="acceptTOS()" class="bn5" style="margin-top: 25px;">I Accept</button>
+    </div>
+  </div>
+  <div id="content">
+    <header class="header">
+      <div class="logo">
+        <button class="home-menu-item btn41-43 btn-41" onclick="window.location.href='/'" class="title">
+          <img src="/favicon.ico" class="nav-icon">
+          <strong>nate-games</strong>
+        </button>
+      </div>
+      <nav class="menu">
+        <div class="dropdown">
+          <button class="menu-item dropbtn">Categories</button>
+          <div class="dropdown-content">
+            <a href="/0/g/#all">ALL | 💯+</a>
+            <a href="/0/g/?clicker">Clicker | <img src="/0/assets/img/tags/pc-mice.svg"
+                style="vertical-align: middle; height: 20px;"></a>
+            <a href="/0/g/?shooting">Shooting | <img src="/0/assets/img/tags/crosshair.svg"
+                style="vertical-align: middle;"></a>
+            <a href="/0/g/?point-and-click">Point & Click | 🖱️</a>
+            <a href="/0/g/?action">Action | 💥</a>
+            <a href="/0/g/?kids">Kids | 👨🏿‍🌾</a>
+            <span style="border-top: 2px solid #222; border-bottom: 2px solid #222; border-radius: 0;"><b>Game
+                engines</b></span>
+            <a href="/0/g/?html5">HTML5 | <img src="/0/assets/img/misc/html5.svg"
+                style="vertical-align: middle; height: 14px;"></a>
+            <a href="/0/g/?unity">Unity | <img src="/0/assets/img/misc/unity.svg"
+                style="vertical-align: middle; height: 14px;"></a>
+            <a href="/0/g/?flash">Flash | <img src="/0/assets/img/misc/adobe-flash.svg"
+                style="vertical-align: middle; height: 14px;"></a>
+            <a href="/0/g/?scratch">Scratch | <img src="/0/assets/img/misc/scratch.svg"
+                style="vertical-align: middle; height: 14px;"></a>
+            <!-- https://upload.wikimedia.org/wikipedia/commons/b/b1/Scratch_S.svg !-->
+          </div>
+        </div>
+
+        <button class="menu-item" onclick="window.location.href='/0/g/'">
+          Games
+        </button>
+        <button class="menu-item" onclick="window.location.href='/0/a/'">
+          Apps
+        </button>
+        <button class="menu-item" onclick="window.location.href='https://nate-games.github.io/docs/'">
+          Documentation
+        </button>
+        <div class="dropdown">
+          <button class="menu-item dropbtn">More</button>
+          <div class="dropdown-content" style="right: 0; min-width: 180px;">
+            <a href="https://discord.gg/9mJcqwZ2a5" target="_blank">Join the Discord | 💬</a>
+            <a href="https://contact-us.nate-games.workers.dev" target="_blank">Contact | 📝</a>
+            <a href="https://github.com/nate-games/nate-games.github.io" target="_blank">GitHub | <img
+                src="/0/assets/img/misc/github.svg" style="vertical-align: middle; height: 25px;"></a>
+            <a href="https://github.com/nate-games/nate-games.github.io" target="_blank">Sponsor | <img
+                src="/0/assets/img/misc/sponsor.svg" class="sponsor"></a>
+          </div>
+        </div>
+      </nav>
+    </header>
+    <script>
+      fetch('games.json')
+        .then(response => response.json())
+        .then(data => {
+          const gameContainer = document.getElementById('game-container');
+          const urlParams = new URLSearchParams(window.location.search);
+
+          data.forEach(game => {
+            if (urlParams.toString() === '' || window.location.pathname === '/') {
+              createGameCard(game, gameContainer);
+            } else {
+              const tags = game.tags.split(', ');
+
+              const matchingTags = tags.filter(tag => urlParams.has(tag.toLowerCase()));
+
+              if (matchingTags.length > 0) {
+                createGameCard(game, gameContainer);
+              }
+            }
+          });
+        })
+        .catch(error => {
+          console.error('Error loading JSON data:', error);
+        });
+
+      function createGameCard(game, container) {
+        const gameCard = document.createElement('div');
+        gameCard.classList.add('game-card');
+
+        gameCard.addEventListener('click', function () {
+          if (game.requiresProxy) {
+            const userResponse = prompt('A Proxy or VPN is required to play this game. Do you have a proxy or VPN enabled? (yes/no)');
+
+            if (userResponse && userResponse.toLowerCase() === 'yes') {
+              window.location.href = game.url;
+            } else {
+              alert('You need a proxy or VPN to play this game. Please enable one and come back.');
+            }
+          } else {
+            window.location.href = game.url;
+          }
+        });
+
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('image-container');
+
+        const img = document.createElement('img');
+        img.src = game.imageSrc;
+        img.onerror = function () {
+          this.src = '/static/image-placeholder.svg';
+        };
+
+        const h3 = document.createElement('h3');
+        h3.textContent = game.name;
+
+        imageContainer.appendChild(img);
+        gameCard.appendChild(imageContainer);
+        gameCard.appendChild(h3);
+        container.appendChild(gameCard);
+      }
+
+
+    </script>
+    <center>
+      <div class="adblocker"><img src="./adblocker.png" height="140"><span class="adblock-text">
+          <h2>Hello user!</h2>
+          <p>We appreciate your visit! To help keep our content free, please consider disabling your adblocker. Our ads
+            are non-intrusive and support our site. Thank you for your support!</p><br><span
+            style="text-decoration: none; color: #2863c2; cursor: pointer;">Do not sell my personal information</span>
+        </span><br></div>
+      <div class="flash-opener">
+        <div id="flash-container"></div>
+        <div class="button-container">
+          <button for="file-input" class="file-input-button"><label for="file-input" class="file-input-button">Select
+              File</label></button>
+          <input type="file" id="file-input" style="display: none;" onchange="handleFileChange(event)"
+            accept=".swf, .spl">
+          <button onclick="loadFlash()" class="file-input-button">Load Flash</button>
+        </div>
+        <div id="file-name"></div>
+      </div>
+      <input type="text" id="search-bar" placeholder="Search..." oninput="search()" class="search-input" />
+      <p>Games shown on this website are the property of their respective owners.</p>
+      <p>Need to take down your game? <a href="javascript:Open DMCA in new window;"
+          onclick="window.open('https://github.com/nate-games/nate-games.github.io/issues/new?assignees=nate-games&labels=DMCA&projects=&template=dmca.yaml&title=[DMCA]:<title>', '_blank', 'width=800,height=600'); return false;">DMCA</a>
+        (Opens in a new window)</p>
+    </center>
+    <div class="game-container" id="game-container">
+      <!--onerror="this.src='https://www.livenirvana.com/demotapes/images/no-image.png'" DEFAULT: onerror="this.src='../../static/image-placeholder.svg'"-->
+      <div class="game-card"
+        onclick="window.location.href='https://github.com/nate-games/nate-games.github.io/issues/new?assignees=nate-games&labels=Add-Game&projects=&template=add_game.yaml&title=%5BGame+Recommendation%5D%3A+%3Ctitle%3E'">
+        <div class="image-container">
+          <img src="request-svg.png" onerror="this.src='../../static/image-placeholder.svg'" />
+        </div>
+        <h3>Add a game!</h3>
+      </div>
+      <!--note to myself: The div below is for the TOS don't touch it!-->
+    </div>
+    <footer style="margin-bottom: 4em; margin-top: 9em;">
+      <center>&copy; 2023-2024 nate-games<br><br><a
+          href="https://github.com/nate-games/nate-games.github.io/blob/main/SECURITY.md">Security Policy</a> &bull; <a
+          href="/0/privacy-policy.html">Privacy Policy</a> &bull; <a href="/0/terms-of-service.html">Terms of
+          Service</a> &bull; <a href="https://github.com/nate-games/nate-games.github.io/wiki">Wikipedia/Docs</a>
+      </center>
+    </footer>
+    <script src="flash-loader.min.js"></script>
+    <script src="search.js"></script>
+    <script src="/0/assets/js/tos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ruffle-rs/ruffle"></script>
+    <script src="https://unpkg.com/@ruffle-rs/ruffle"></script>
+</body>
+
+</html>
